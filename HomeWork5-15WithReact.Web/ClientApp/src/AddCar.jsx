@@ -36,7 +36,6 @@ class AddCar extends React.Component {
     }
 
     onSumbit = async () => {
-        console.log('hello')
         await axios.post('/api/peoplecar/addcar', this.state.car);
         this.props.history.push('/');
     }

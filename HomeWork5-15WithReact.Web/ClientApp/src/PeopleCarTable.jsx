@@ -15,7 +15,7 @@ class PeopleCarTable extends React.Component {
             age: '',
             cars: [],
         },
-        cars: [],      
+          
     }
     refreshPeople = async () => {
         const response = await axios.get('/api/peoplecar/getall');
