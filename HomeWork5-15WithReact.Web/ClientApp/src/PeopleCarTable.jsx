@@ -15,7 +15,8 @@ class PeopleCarTable extends React.Component {
             age: '',
             cars: [],
         },
-          
+        searchedPeople: [],
+
     }
     refreshPeople = async () => {
         const response = await axios.get('/api/peoplecar/getall');
@@ -23,28 +24,38 @@ class PeopleCarTable extends React.Component {
         this.setState({ people });
     };
     generateTable = () => {
-        const { people } = this.state;
-        return people.map(p => <PersonCarRow
-            key={p.id}
-            person={p}
-        /> 
-            
-      )
+        const { people, searchedPeople } = this.state;
+        if (searchedPeople.length) {
+            return searchedPeople.map(p => <PersonCarRow
+                key={p.id}
+                person={p} />)
+        } else {
+            return people.map(p => <PersonCarRow
+                key={p.id}
+                person={p} />)
+        }
+        
+       
     }
-     
+    onTextChange = e => {
+        const searchedPeople = this.state.people.filter(p => p.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+            p.lastName.toLowerCase().includes(e.target.value.toLowerCase()));
+        this.setState({ searchedPeople });
+    }
+  
     componentDidMount = () => {
-        this.refreshPeople();     
-    }
+        this.refreshPeople();
+    };
 
     render() {
-
+     
         return <div id="root">
-           
+
             <div className='container' style={{ marginTop: '80px' }}>
                 <div >
                     <div className='row'>
                         <div className='col-md-10'>
-                            <input className='form-control form-control-lg' type='text' placeholder='Search People' />
+                            <input onChange={this.onTextChange} className='form-control form-control-lg' type='text' placeholder='Search People' />
                         </div>
                         <div className='col-md-2'>
                             <button className='btn btn-dark btn-lg w-100'>Clear</button>
@@ -52,7 +63,7 @@ class PeopleCarTable extends React.Component {
                         <div className='col-md-12' style={{ marginTop: '20px' }}>
 
                             <Link to='/addperson' className="btn btn-success btn-lg w-100"
- >                                                                                                                       
+                            >
                                 AddPerson
                             </Link>
                         </div>
